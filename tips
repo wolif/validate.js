@@ -1,0 +1,94 @@
+validate processing
+    *    0.confirm the value & type 
+    *    1.necessity validation(default [sometimes])
+         2.ignored values validation(can be omitted)
+    *    3.type validation(default type [any])
+         4.validate the value
+    
+    stage: every processing has several process, every process here is one stage
+        every stage result has 3 status
+            failed   -   not pass the validation
+            quit     -   give up to validate the value
+            success  -   pass the validation
+    the processing result also has above 3 status, the decision condition as follows:
+        | ------- | ------------------------------------ 
+        | failed  | in one stage, the result is failed
+        | ------- | ------------------------------------
+        |  quit   | in one stage, the result is quit
+        | ------- | ------------------------------------
+        | success | in all stage, the result is success
+        | ------- | ------------------------------------
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    builtin components
+        necessity (must, optional) (failed, success, quit)
+            required                                                                  must
+            sometimes                                                                 optional
+            required_if:x, a                        x == a                            must
+            required_unless:x, a                    x != a                            must
+            required_with:x,y                       x exists || y exists              must
+            required_without:x                      x not exists                      must
+            required_withAll:x, y                   x exists && y exists              must
+            required_withoutAll:x, y                x not exists && y not exists      must
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        ignore (ignore value can be omitted)
+            ignore:x,y, ...                         value == x || value == y || ...   quit
+
+        #   builtin ignore value
+                name in use                         the value in validation
+                zero                                0
+                null                                null
+                empty                               ''
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+        type
+            any
+            int
+                min: x                              value >= x
+                max: x                              value <= x
+                lt: x                               value < x
+                lte: x                              value <= x
+                gt: x                               value > x
+                gte: x                              value >= x
+                in: x, y, z...                      value in [x, y, z...]
+                nin: x, y, z...                     value in [x, y, z...]
+                cmpGt: y                            value > value(y)
+                cmpGte: y                           value >= value(y)
+                cmpLt: y                            value < value(y)
+                cmpLte: y                           value <= value(y)
+            number
+                min: x                              value >= x
+                max: x                              value <= x
+                lt: x                               value < x
+                lte: x                              value <= x
+                gt: x                               value > x
+                gte: x                              value >= x
+                in: x, y, z...                      value in [x, y, z...]
+                nin: x, y, z...                     value in [x, y, z...]
+                cmpGt: y                            value > value(y)
+                cmpGte: y                           value >= value(y)
+                cmpLt: y                            value < value(y)
+                cmpLte: y                           value <= value(y)
+            string
+                json                                value with json format necessary
+                json: x, y, z                       json format with field [x, y, z...]
+                sizeMin: x                          strlen(value) >= x
+                sizeMax: x                          strlen(value) <= x
+                regex: x                            /x/.match(value) == true
+                format: x(dateTime, date, time)     /x/.match(value) == true
+                in: x, y, z...                      value in [x, y, z...]
+                nin: x, y, z...                     value in [x, y, z...]
+                cmpLenGt: y                         strlen(value) > strlen(y)
+                cmpLenGte: y                        strlen(value) >= strlen(y)
+                cmpLenLt: y                         strlen(value) < strlen(y)
+                cmpLenLte: y                        strlen(value) <= strlen(y)
+            array
+                sizeMin: x                          arrlen(value) >= x
+                sizeMax: x                          arrlen(value) <= x
+                cmpLenGt: y                         arrlen(value) > arrlen(y)
+                cmpLenGte: y                        arrlen(value) >= arrlen(y)
+                cmpLenLt: y                         arrlen(value) < arrlen(y)
+                cmpLenLte: y                        arrlen(value) <= arrlen(y)
+            object
+                contain: x, y, ...                  object[x] must exists && object[y] must exists && ...
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
