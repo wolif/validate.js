@@ -5,31 +5,34 @@ const _ = require('lodash');
 const dirNecessity = `${__dirname}/necessity`;
 const dirType = `${__dirname}/type`;
 
-const components = {
-  instances: {},
-  typeComponentsFiles: {
-    any: `${dirType}/any`,
-    array: `${dirType}/array`,
-    int: `${dirType}/int`,
-    number: `${dirType}/number`,
-    object: `${dirType}/object`,
-    string: `${dirType}/string`,
-  },
-  necessityComponentsFiles: {
-    required: `${dirNecessity}/required`,
-    requiredIf: `${dirNecessity}/requiredIf`,
-    requiredUnless: `${dirNecessity}/requiredUnless`,
-    requiredWith: `${dirNecessity}/requiredWith`,
-    requiredWithAll: `${dirNecessity}/requiredWithAll`,
-    requiredWithout: `${dirNecessity}/requiredWithout`,
-    requiredWithoutAll: `${dirNecessity}/requiredWithoutAll`,
-    requiredSometimes: `${dirNecessity}/sometimes`,
-  },
-  get: (name) => {
-    if (!(name in this.instances)) {
-      if (name in this.typeComponentsFiles) {
+class Components {
+  constructor() {
+    this.instances = {};
+    this.typeComponentsFiles = {
+      any: `${dirType}/any`,
+      array: `${dirType}/array`,
+      int: `${dirType}/int`,
+      number: `${dirType}/number`,
+      object: `${dirType}/object`,
+      string: `${dirType}/string`,
+    };
+    this.necessityComponentsFiles = {
+      required: `${dirNecessity}/required`,
+      requiredIf: `${dirNecessity}/requiredIf`,
+      requiredUnless: `${dirNecessity}/requiredUnless`,
+      requiredWith: `${dirNecessity}/requiredWith`,
+      requiredWithAll: `${dirNecessity}/requiredWithAll`,
+      requiredWithout: `${dirNecessity}/requiredWithout`,
+      requiredWithoutAll: `${dirNecessity}/requiredWithoutAll`,
+      requiredSometimes: `${dirNecessity}/sometimes`,
+    };
+  }
+
+  get(name) {
+    if (!_.has(this.instances, name)) {
+      if (_.has(this.typeComponentsFiles, name)) {
         this.instances[name] = require(this.typeComponentsFiles[name]);
-      } else if (name in this.necessityComponentsFiles) {
+      } else if (_.has(this.necessityComponentsFiles, name)) {
         this.instances[name] = require(this.necessityComponentsFiles[name]);
       } else {
         throw new Error(`component named ${name} not found`);
@@ -37,11 +40,12 @@ const components = {
     }
 
     return this.instances[name];
-  },
-  set: (type, name, component, cover = true) => {
+  }
+
+  set(type, name, component, cover = true) {
     switch (type) {
       case this.type:
-        if ((name in this.typeComponentsFiles || name in this.instances) && !cover) {
+        if ((_.has(this.typeComponentsFiles, name) || _.has(this.instances, name)) && !cover) {
           break;
         }
         if (_.isString(component)) {
@@ -51,7 +55,7 @@ const components = {
         }
         break;
       case this.necessity:
-        if ((name in this.necessityComponentsFiles || name in this.instances) && !cover) {
+        if ((_.has(this.necessityComponentsFiles, name) || _.has(this.instances, name)) && !cover) {
           break;
         }
         if (_.isString(component)) {
@@ -62,8 +66,10 @@ const components = {
         break;
       default: break;
     }
-  },
-};
+  }
+}
+
+const components = new Components();
 
 Object.defineProperties(components, {
   type: {

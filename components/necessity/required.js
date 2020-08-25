@@ -4,11 +4,11 @@ const component = require('../component');
 
 module.exports = Object.defineProperties(Object.create(component), {
   confirm: {
-    value: (input, filed, ...params) => {
-      if (_.has(input, filed)) {
+    value: (input, field, ...params) => {
+      if (_.has(input, field)) {
         return ResCreator.success();
       }
-      return ResCreator.failed(`param [${filed}] is required`, 'required');
+      return ResCreator.failed(`param [${field}] is required`, 'required');
     },
   },
 });

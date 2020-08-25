@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const _ = require('lodash');
 
-module.exports = {
+const helper = {
   objectHas: (o, prop, delimiter = '.', starAsAnyEle = true) => {
     const pieces = prop.split(delimiter);
     let nowSearch = o;
@@ -110,3 +110,5 @@ module.exports = {
     return ret;
   },
 };
+
+module.exports = helper;

@@ -42,7 +42,7 @@ module.exports = Object.defineProperties(Object.create(component), {
     value: (input, field, ...params) => {
       const [sizeMin] = params;
       if (input[field].toString().length >= sizeMin) {
-        ResCreator.success();
+        return ResCreator.success();
       }
       return ResCreator.failed(`the string length of param [${field}] must >= ${sizeMin}`, 'sizeMin');
     },
@@ -51,7 +51,7 @@ module.exports = Object.defineProperties(Object.create(component), {
     value: (input, field, ...params) => {
       const [sizeMax] = params;
       if (input[field].toString().length <= sizeMax) {
-        ResCreator.success();
+        return ResCreator.success();
       }
       return ResCreator.failed(`the string length of param [${field}] must <= ${sizeMax}`, 'sizeMax');
     },

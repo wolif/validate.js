@@ -60,9 +60,10 @@ class Process {
   }
 
   exec(field, input) {
+    const thisNecessity = Array.from(this.necessity);
     // validate necessity
-    const necessity = components.get(this.necessity.shift());
-    let result = necessity.confirm(field, input, ...this.necessity);
+    const necessity = components.get(thisNecessity.shift());
+    let result = necessity.confirm(input, field, ...thisNecessity);
     if (result.status !== ResStatus.SUCCESS) {
       return result;
     }
@@ -74,15 +75,16 @@ class Process {
 
     // validate date type
     const type = components.get(this.type);
-    result = type.confirm(field, input);
+    result = type.confirm(input, field);
     if (result.status !== ResStatus.SUCCESS) {
       return result;
     }
 
     // validate date through type component
     for (const process of this.processes) {
-      const method = process.shift();
-      result = type[method](field, input, ...process);
+      const thisProcess = Array.from(process);
+      const method = thisProcess.shift();
+      result = type[method](input, field, ...thisProcess);
       if (result.status !== ResStatus.SUCCESS) {
         return result;
       }
@@ -92,7 +94,7 @@ class Process {
   }
 
   execute(field, input) {
-    if (new Set(field.split(',')).has('*')) {
+    if (new Set(field.split('.')).has('*')) {
       for (const value of input[field]) {
         const o = {};
         o[field] = value;

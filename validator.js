@@ -3,18 +3,18 @@ const Process = require('./process');
 const { objectGet, objectHas } = require('./helper');
 const { status: ResStatus } = require('./result');
 
-module.exports = {
-  hints: {},
-  processes: {},
-  result: {},
+class Validator {
+  constructor() {
+    this.init();
+  }
 
-  init: () => {
+  init() {
     this.hints = {};
     this.processes = {};
     this.result = {};
-  },
+  }
 
-  set: (rules, hints) => {
+  set(rules, hints) {
     this.init();
 
     _.forIn(hints, (hint, field) => {
@@ -34,9 +34,9 @@ module.exports = {
     });
 
     return this;
-  },
+  }
 
-  validate: (input) => {
+  validate(input) {
     this.result = {};
 
     const inputUse = {};
@@ -58,7 +58,21 @@ module.exports = {
     });
 
     return this.result;
-  },
+  }
 
-  v: (input, rules, hints = {}) => this.set(rules, hints).validate(input),
-};
+  fails() {
+    const ret = {};
+    _.forIn(this.result, (result, field) => {
+      if (result.status === ResStatus.FAILED) {
+        ret[field] = result;
+      }
+    });
+    return ret;
+  }
+
+  v(input, rules, hints = {}) {
+    return this.set(rules, hints).validate(input);
+  }
+}
+
+module.exports = new Validator();
