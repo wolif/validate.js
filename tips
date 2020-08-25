@@ -46,9 +46,7 @@ validate processing
                 min: x                              value >= x
                 max: x                              value <= x
                 lt: x                               value < x
-                lte: x                              value <= x
                 gt: x                               value > x
-                gte: x                              value >= x
                 in: x, y, z...                      value in [x, y, z...]
                 nin: x, y, z...                     value in [x, y, z...]
                 cmpGt: y                            value > value(y)
@@ -59,9 +57,7 @@ validate processing
                 min: x                              value >= x
                 max: x                              value <= x
                 lt: x                               value < x
-                lte: x                              value <= x
                 gt: x                               value > x
-                gte: x                              value >= x
                 in: x, y, z...                      value in [x, y, z...]
                 nin: x, y, z...                     value in [x, y, z...]
                 cmpGt: y                            value > value(y)
@@ -71,23 +67,23 @@ validate processing
             string
                 json                                value with json format necessary
                 json: x, y, z                       json format with field [x, y, z...]
-                sizeMin: x                          strlen(value) >= x
-                sizeMax: x                          strlen(value) <= x
+                sizeMin: x                          strLen(value) >= x
+                sizeMax: x                          strLen(value) <= x
                 regex: x                            /x/.match(value) == true
                 format: x(dateTime, date, time)     /x/.match(value) == true
                 in: x, y, z...                      value in [x, y, z...]
                 nin: x, y, z...                     value in [x, y, z...]
-                cmpLenGt: y                         strlen(value) > strlen(y)
-                cmpLenGte: y                        strlen(value) >= strlen(y)
-                cmpLenLt: y                         strlen(value) < strlen(y)
-                cmpLenLte: y                        strlen(value) <= strlen(y)
+                cmpLenGt: y                         strLen(value) > strLen(y)
+                cmpLenGte: y                        strLen(value) >= strLen(y)
+                cmpLenLt: y                         strLen(value) < strLen(y)
+                cmpLenLte: y                        strLen(value) <= strLen(y)
             array
-                sizeMin: x                          arrlen(value) >= x
-                sizeMax: x                          arrlen(value) <= x
-                cmpLenGt: y                         arrlen(value) > arrlen(y)
-                cmpLenGte: y                        arrlen(value) >= arrlen(y)
-                cmpLenLt: y                         arrlen(value) < arrlen(y)
-                cmpLenLte: y                        arrlen(value) <= arrlen(y)
+                sizeMin: x                          arrSize(value) >= x
+                sizeMax: x                          arrSize(value) <= x
+                cmpSizeGt: y                        arrSize(value) > arrSize(y)
+                cmpSizeGte: y                       arrSize(value) >= arrSize(y)
+                cmpSizeLt: y                        arrSize(value) < arrSize(y)
+                cmpSizeLte: y                       arrSize(value) <= arrSize(y)
             object
                 contain: x, y, ...                  object[x] must exists && object[y] must exists && ...
 

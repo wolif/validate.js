@@ -1,0 +1,12 @@
+{
+    "name": "validate",
+    "version": "0.0.1",
+    "author": {
+        "name": "leef.wei",
+        "email": "weilingfeiwlf@163.com"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "lodash": "4.17.20"
+    }
+}
