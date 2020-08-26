@@ -11,6 +11,8 @@ const result = validator.v({
     c: { x: 13, y: 23 },
   },
 }, {
+  'object.d': 'required|array|sizeMin:1',
+  object: 'required|object|contain:a,b,c',
   'array.*': 'required|int|min:1',
   string: 'required|string|sizeMin:4',
   int: 'required|int|min:0',

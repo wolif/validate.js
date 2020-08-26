@@ -21,7 +21,7 @@ module.exports = Object.defineProperties(Object.create(component), {
 
       for (const key of keys) {
         if (!(key in input[filed])) {
-          return ResCreator.failed(`param [${filed}] must contains key [${key}]`, 'contain');
+          return ResCreator.failed(`param [${filed}] must contains properties [${keys}], property [${key}] omitted`, 'contain');
         }
       }
       return ResCreator.success();
