@@ -1,8 +1,8 @@
 const component = {
   extensions: {},
   extend: (name, callback, cover = true) => {
-    if (!(name in this.extensions) || cover) {
-      this.extensions[name] = callback;
+    if (!(name in component.extensions) || cover) {
+      component.extensions[name] = callback;
     }
   },
 };

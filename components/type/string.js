@@ -4,6 +4,22 @@ const _ = require('lodash');
 const { ResCreator } = require('../../result');
 const component = require('../component');
 
+const strFmt = {
+  data: {
+    ipv4: '^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$',
+    email: '^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$',
+    date: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$',
+    time: '^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
+    datetime: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
+  },
+  get: (name) => strFmt.data[name],
+  set: (name, regex, cover = true) => {
+    if (!_.has(strFmt.data, name) || cover) {
+      strFmt.data[name] = regex;
+    }
+  },
+};
+
 module.exports = Object.defineProperties(Object.create(component), {
   confirm: {
     value: (input, field, ...params) => {
@@ -65,30 +81,17 @@ module.exports = Object.defineProperties(Object.create(component), {
       return ResCreator.failed(`param [${field}] format error`, 'regex');
     },
   },
-  formats: {
-    value: {
-      ipv4: '^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$',
-      email: '^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$',
-      date: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$',
-      time: '^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
-      datetime: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
-    },
-    writable: true,
-  },
   setFormat: {
-    value: (name, regex, cover = true) => {
-      if (!(name in this.formats) || cover) {
-        this.formats[name] = regex;
-      }
-    },
+    value: strFmt.set,
   },
   format: {
     value: (input, field, ...params) => {
       const [formatName] = params;
-      if (!(formatName in this.formats)) {
+      const regex = strFmt.get(formatName);
+      if (!regex) {
         return ResCreator.failed(`format type [${formatName}] not defined`, 'format');
       }
-      if (new RegExp(this.formats[formatName]).test(input[field])) {
+      if (new RegExp(regex).test(input[field])) {
         return ResCreator.success();
       }
       return ResCreator.failed(`format error, [${formatName}] format needed`, 'format');
