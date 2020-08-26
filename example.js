@@ -13,6 +13,7 @@ components.int.extend('eq', (input, field, ...params) => {
 });
 
 const result = validator.v({
+  gender: 'c', // m => man, f => female
   string: 'text',
   int: 13,
   number: 1.23,
@@ -25,6 +26,7 @@ const result = validator.v({
   div: 'div',
   mobile: '13912345678',
 }, {
+  gender: 'sometimes|string|in:m,f,a',
   mobile: 'required|string|format:mobile',
   div: 'required|string|format:div',
   'object.d': 'required|array|sizeMin:1',

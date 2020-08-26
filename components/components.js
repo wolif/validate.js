@@ -24,7 +24,7 @@ class Components {
       requiredWithAll: `${dirNecessity}/requiredWithAll`,
       requiredWithout: `${dirNecessity}/requiredWithout`,
       requiredWithoutAll: `${dirNecessity}/requiredWithoutAll`,
-      requiredSometimes: `${dirNecessity}/sometimes`,
+      sometimes: `${dirNecessity}/sometimes`,
     };
   }
 

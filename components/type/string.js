@@ -107,7 +107,7 @@ module.exports = Object.defineProperties(Object.create(component), {
       if (v.has(input[field])) {
         return ResCreator.success();
       }
-      return ResCreator.failed(`param [${field}] must in ${values}`, 'in');
+      return ResCreator.failed(`param [${field}] must in [${values}]`, 'in');
     },
   },
   nin: {
@@ -120,7 +120,7 @@ module.exports = Object.defineProperties(Object.create(component), {
       if (!v.has(input[field])) {
         return ResCreator.success();
       }
-      return ResCreator.failed(`param [${field}] must not in ${values}`, 'in');
+      return ResCreator.failed(`param [${field}] must not in [${values}]`, 'in');
     },
   },
   cmpLenGt: {

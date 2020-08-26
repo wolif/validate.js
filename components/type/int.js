@@ -59,7 +59,7 @@ module.exports = Object.defineProperties(Object.create(component), {
         return ResCreator.success();
       }
 
-      return ResCreator.failed(`param [${field}] must be in ${v}`, 'in');
+      return ResCreator.failed(`param [${field}] must be in [${v}]`, 'in');
     },
   },
   nin: {
@@ -74,7 +74,7 @@ module.exports = Object.defineProperties(Object.create(component), {
         return ResCreator.success();
       }
 
-      return ResCreator.failed(`param [${field}] must be not in ${v}`, 'nin');
+      return ResCreator.failed(`param [${field}] must be not in [${v}]`, 'nin');
     },
   },
   cmpLt: {
