@@ -2,8 +2,8 @@ const validator = require('./validator');
 const components = require('./components/components');
 const { ResCreator } = require('./result');
 
-components.string.setFormat('div', '^div$');
-components.string.setFormat('mobile', '^1[2-9]{1}[0-9]{9}$');
+components.string.setFormat('div', /^div$/);
+components.string.setFormat('mobile', /^1[2-9]{1}[0-9]{9}$/);
 components.int.extend('eq', (input, field, ...params) => {
   const [value] = params;
   if (input[field] === parseInt(value, 10)) {
@@ -37,5 +37,3 @@ const result = validator.v({
 }, {});
 
 console.log(result);
-
-// console.log(validator);

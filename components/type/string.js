@@ -6,15 +6,15 @@ const component = require('../component');
 
 const strFmt = {
   data: {
-    ipv4: '^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$',
-    email: '^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$',
-    date: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$',
-    time: '^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
-    datetime: '^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$',
+    ipv4: /^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$/,
+    email: /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/,
+    date: /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/,
+    time: /^(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/,
+    datetime: /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/,
   },
   get: (name) => strFmt.data[name],
   set: (name, regex, cover = true) => {
-    if (!_.has(strFmt.data, name) || cover) {
+    if ((!_.has(strFmt.data, name) || cover) && regex instanceof RegExp) {
       strFmt.data[name] = regex;
     }
   },
@@ -74,8 +74,11 @@ module.exports = Object.defineProperties(Object.create(component), {
   },
   regex: {
     value: (input, field, ...params) => {
-      const [regexStr, modifier = ''] = params;
-      if (new RegExp(regexStr, modifier).test(input[field])) {
+      const [regex, modifier = ''] = params;
+      if (!(regex instanceof RegExp)) {
+        throw new Error(`[${regex}] is not a valid RegExp object`);
+      }
+      if (regex.test(input[field])) {
         return ResCreator.success();
       }
       return ResCreator.failed(`param [${field}] format error`, 'regex');
@@ -91,7 +94,7 @@ module.exports = Object.defineProperties(Object.create(component), {
       if (!regex) {
         return ResCreator.failed(`format type [${formatName}] not defined`, 'format');
       }
-      if (new RegExp(regex).test(input[field])) {
+      if (regex.test(input[field])) {
         return ResCreator.success();
       }
       return ResCreator.failed(`format error, [${formatName}] format needed`, 'format');

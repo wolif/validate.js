@@ -5,6 +5,7 @@ const { status: ResStatus } = require('./result');
 
 class Validator {
   constructor() {
+    Validator.instance = null;
     this.init();
   }
 
